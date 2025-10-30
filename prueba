@@ -1,0 +1,161 @@
+#include <iostream>
+using namespace std;
+
+// Función para inicializar el tablero vacío
+void inicializarTablero(char tablero[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            tablero[i][j] = ' ';
+        }
+    }
+}
+
+// Función para mostrar el tablero
+void mostrarTablero(char tablero[3][3]) {
+    cout << "\n     1   2   3" << endl;
+    cout << "   +---+---+---+" << endl;
+    for (int i = 0; i < 3; i++) {
+        cout << " " << (i + 1) << " ";
+        for (int j = 0; j < 3; j++) {
+            cout << "| " << tablero[i][j] << " ";
+        }
+        cout << "|" << endl;
+        cout << "   +---+---+---+" << endl;
+    }
+    cout << endl;
+}
+
+// Función para verificar si una posición está disponible
+bool posicionValida(char tablero[3][3], int fila, int columna) {
+    if (fila < 0 || fila > 2 || columna < 0 || columna > 2) {
+        return false;
+    }
+    return tablero[fila][columna] == ' ';
+}
+
+// Función para verificar si hay un ganador
+char verificarGanador(char tablero[3][3]) {
+    // Verificar filas
+    for (int i = 0; i < 3; i++) {
+        if (tablero[i][0] != ' ' && 
+            tablero[i][0] == tablero[i][1] && 
+            tablero[i][1] == tablero[i][2]) {
+            return tablero[i][0];
+        }
+    }
+    
+    // Verificar columnas
+    for (int j = 0; j < 3; j++) {
+        if (tablero[0][j] != ' ' && 
+            tablero[0][j] == tablero[1][j] && 
+            tablero[1][j] == tablero[2][j]) {
+            return tablero[0][j];
+        }
+    }
+    
+    // Verificar diagonal principal
+    if (tablero[0][0] != ' ' && 
+        tablero[0][0] == tablero[1][1] && 
+        tablero[1][1] == tablero[2][2]) {
+        return tablero[0][0];
+    }
+    
+    // Verificar diagonal secundaria
+    if (tablero[0][2] != ' ' && 
+        tablero[0][2] == tablero[1][1] && 
+        tablero[1][1] == tablero[2][0]) {
+        return tablero[0][2];
+    }
+    
+    return ' '; // No hay ganador
+}
+
+// Función para verificar si el tablero está lleno (empate)
+bool tableroLleno(char tablero[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (tablero[i][j] == ' ') {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Función principal del juego
+void jugar() {
+    char tablero[3][3];
+    char jugadorActual = 'X';
+    int fila, columna;
+    bool juegoTerminado = false;
+    
+    inicializarTablero(tablero);
+    
+    cout << "\n====================================" << endl;
+    cout << "    ¡BIENVENIDO AL TIC TAC TOE!" << endl;
+    cout << "====================================" << endl;
+    cout << "Jugador 1: X" << endl;
+    cout << "Jugador 2: O" << endl;
+    cout << "Ingresa fila y columna (1-3)" << endl;
+    
+    while (!juegoTerminado) {
+        mostrarTablero(tablero);
+        
+        cout << "Turno del jugador " << jugadorActual << endl;
+        cout << "Ingresa fila (1-3): ";
+        cin >> fila;
+        cout << "Ingresa columna (1-3): ";
+        cin >> columna;
+        
+        // Convertir a índices del arreglo (0-2)
+        fila--;
+        columna--;
+        
+        // Verificar si la posición es válida
+        if (!posicionValida(tablero, fila, columna)) {
+            cout << "\n¡Posición inválida! Intenta de nuevo.\n" << endl;
+            continue;
+        }
+        
+        // Colocar la marca del jugador
+        tablero[fila][columna] = jugadorActual;
+        
+        // Verificar si hay ganador
+        char ganador = verificarGanador(tablero);
+        if (ganador != ' ') {
+            mostrarTablero(tablero);
+            cout << "====================================" << endl;
+            cout << "   ¡JUGADOR " << ganador << " HA GANADO!" << endl;
+            cout << "====================================" << endl;
+            juegoTerminado = true;
+        }
+        // Verificar si hay empate
+        else if (tableroLleno(tablero)) {
+            mostrarTablero(tablero);
+            cout << "====================================" << endl;
+            cout << "       ¡ES UN EMPATE!" << endl;
+            cout << "====================================" << endl;
+            juegoTerminado = true;
+        }
+        // Cambiar de jugador
+        else {
+            jugadorActual = (jugadorActual == 'X') ? 'O' : 'X';
+        }
+    }
+}
+
+int main() {
+    char respuesta;
+    
+    do {
+        jugar();
+        
+        cout << "\n¿Deseas jugar otra vez? (s/n): ";
+        cin >> respuesta;
+        
+    } while (respuesta == 's' || respuesta == 'S');
+    
+    cout << "\n¡Gracias por jugar!" << endl;
+    
+    return 0;
+}

@@ -1,5 +1,5 @@
 #include <iostream>
-using namespace std;
+using namespace std; // se utiliza para ya no escribir std en cout y cin
 
 
 // Tablero vaciòn
@@ -13,7 +13,15 @@ void Tablerovacio(char tablero[3][3]) {
 
 // Mostrar el tablero
 void mostrarTablero(char tablero[3][3]) {
-    
-    for (int i=0; i < 3; i++){
+    cout << "\n     1   2   3" << endl;
+    cout << "   +---+---+---+" << endl;
+    for (int i = 0; i < 3; i++) {
+        cout << "" < (i +1) << " ";
         for (int j = 0; j < 3; j++){
-            tablero [i][j] = ' ';
+           cout << "!"<< tablero [i][j] << ' ';
+        }
+        cout << "!" << endl;
+        cout << "   +---+---+---+" <<endl;
+    }
+    cout << endl;
+}
